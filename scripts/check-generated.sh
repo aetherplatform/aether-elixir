@@ -12,7 +12,10 @@ for platform in identity events notifications storage webhooks; do
   if [[ -f "${AETHER_ROOT}/scripts/openapi_contracts.rb" ]]; then
     ruby "${AETHER_ROOT}/scripts/openapi_contracts.rb" bundle "${platform}" \
       "${work_dir}/${platform}.json" >/dev/null
-    cmp "${bundled}" "${work_dir}/${platform}.json"
+    # Ruby/JSON releases format empty containers differently. Compare the
+    # contract data; generated Elixir still has an exact byte-for-byte check.
+    ruby -rjson -e 'abort "Bundled public contract is stale" unless JSON.parse(File.read(ARGV[0])) == JSON.parse(File.read(ARGV[1]))' \
+      "${bundled}" "${work_dir}/${platform}.json"
   fi
 done
 
