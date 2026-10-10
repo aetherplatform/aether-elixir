@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "cases": [
+    {"name": "safe read network failure", "method": "GET", "idempotency": "not_applicable", "has_idempotency_key": false, "status": 0, "code": "network_error", "retry": true},
+    {"name": "safe read timeout", "method": "GET", "idempotency": "not_applicable", "has_idempotency_key": false, "status": 0, "code": "request_timeout", "retry": true},
+    {"name": "safe read service unavailable", "method": "GET", "idempotency": "not_applicable", "has_idempotency_key": false, "status": 503, "code": "request_failed", "retry": true},
+    {"name": "safe read rate limited", "method": "GET", "idempotency": "not_applicable", "has_idempotency_key": false, "status": 429, "code": "rate_limited", "retry": true},
+    {"name": "quota is not retryable", "method": "GET", "idempotency": "not_applicable", "has_idempotency_key": false, "status": 429, "code": "quota_exceeded", "retry": false},
+    {"name": "required idempotency present", "method": "POST", "idempotency": "required", "has_idempotency_key": true, "status": 503, "code": "request_failed", "retry": true},
+    {"name": "required idempotency absent", "method": "POST", "idempotency": "required", "has_idempotency_key": false, "status": 503, "code": "request_failed", "retry": false},
+    {"name": "unsupported mutation", "method": "POST", "idempotency": "unsupported", "has_idempotency_key": true, "status": 503, "code": "request_failed", "retry": false},
+    {"name": "caller cancellation", "method": "GET", "idempotency": "not_applicable", "has_idempotency_key": false, "status": 0, "code": "request_aborted", "retry": false}
+  ]
+}

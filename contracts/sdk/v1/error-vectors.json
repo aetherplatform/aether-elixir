@@ -1,0 +1,46 @@
+{
+  "version": "1.0.0",
+  "cases": [
+    {
+      "name": "structured error with retry metadata",
+      "status": 429,
+      "headers": {
+        "x-request-id": "req_header",
+        "retry-after": "3",
+        "ratelimit-limit": "100",
+        "ratelimit-remaining": "0",
+        "ratelimit-reset": "1730000000",
+        "quota-reset": "2026-09-06T00:00:00Z"
+      },
+      "body": {
+        "error": {
+          "code": "rate_limited",
+          "message": "Too many requests",
+          "request_id": "req_body",
+          "details": {"bucket": "storage-read"}
+        }
+      },
+      "expected": {
+        "code": "rate_limited",
+        "message": "Too many requests",
+        "request_id": "req_header",
+        "retry_after_seconds": 3,
+        "rate_limit_limit": 100,
+        "rate_limit_remaining": 0,
+        "rate_limit_reset": 1730000000,
+        "quota_reset": "2026-09-06T00:00:00Z"
+      }
+    },
+    {
+      "name": "fallback error",
+      "status": 503,
+      "headers": {},
+      "body": {},
+      "expected": {
+        "code": "request_failed",
+        "message": "Aether request failed with HTTP 503",
+        "request_id": ""
+      }
+    }
+  ]
+}

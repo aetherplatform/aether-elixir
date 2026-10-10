@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "cases": [
+    {"name": "even parts", "size": 10, "part_size": 5, "part_numbers": [1, 2], "ranges": [[0, 5], [5, 10]], "valid": true},
+    {"name": "short final part", "size": 11, "part_size": 5, "part_numbers": [1, 2, 3], "ranges": [[0, 5], [5, 10], [10, 11]], "valid": true},
+    {"name": "missing part", "size": 11, "part_size": 5, "part_numbers": [1, 3], "ranges": [], "valid": false},
+    {"name": "wrong count", "size": 11, "part_size": 5, "part_numbers": [1, 2], "ranges": [], "valid": false},
+    {"name": "empty body", "size": 0, "part_size": 5, "part_numbers": [], "ranges": [], "valid": false}
+  ],
+  "provider_header_invariant": {
+    "forbidden_headers": ["authorization", "x-request-id", "x-correlation-id"],
+    "etag_preservation": "exact"
+  }
+}

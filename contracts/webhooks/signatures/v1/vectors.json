@@ -1,0 +1,75 @@
+{
+  "schema_name": "aether.webhook-signature-v1-vectors",
+  "schema_version": "1.0.0",
+  "algorithm": "HMAC-SHA256",
+  "signed_bytes": "<unix_timestamp>.<raw_body>",
+  "default_tolerance_seconds": 300,
+  "valid": [
+    {
+      "name": "single current signature",
+      "payload": "{\"id\":\"evt_01\",\"type\":\"storage.object.created\"}",
+      "secret": "whsec_test_current",
+      "now_seconds": 1788530400,
+      "header": "t=1788530400,v1=dab96b48e73fe56712eadb1517a04da91693396ef90dff8f0477f5e570a3f052",
+      "timestamp": 1788530400
+    },
+    {
+      "name": "dual signature accepted by previous secret",
+      "payload": "{\"id\":\"evt_01\",\"type\":\"storage.object.created\"}",
+      "secret": "whsec_test_previous",
+      "now_seconds": 1788530400,
+      "header": "t=1788530400,v1=dab96b48e73fe56712eadb1517a04da91693396ef90dff8f0477f5e570a3f052,v1=cfaf1665f3d5fcb5ad4cc711537aaab9015e5b4e3cb83e24f2c8a04c2bfac42c",
+      "timestamp": 1788530400
+    }
+  ],
+  "invalid": [
+    {
+      "name": "tampered body",
+      "payload": "{\"id\":\"evt_02\",\"type\":\"storage.object.created\"}",
+      "secret": "whsec_test_current",
+      "now_seconds": 1788530400,
+      "header": "t=1788530400,v1=dab96b48e73fe56712eadb1517a04da91693396ef90dff8f0477f5e570a3f052",
+      "error": "invalid_signature"
+    },
+    {
+      "name": "expired timestamp",
+      "payload": "{\"id\":\"evt_01\",\"type\":\"storage.object.created\"}",
+      "secret": "whsec_test_current",
+      "now_seconds": 1788530701,
+      "header": "t=1788530400,v1=dab96b48e73fe56712eadb1517a04da91693396ef90dff8f0477f5e570a3f052",
+      "error": "timestamp_expired"
+    },
+    {
+      "name": "future timestamp",
+      "payload": "{\"id\":\"evt_01\",\"type\":\"storage.object.created\"}",
+      "secret": "whsec_test_current",
+      "now_seconds": 1788530099,
+      "header": "t=1788530400,v1=dab96b48e73fe56712eadb1517a04da91693396ef90dff8f0477f5e570a3f052",
+      "error": "timestamp_expired"
+    },
+    {
+      "name": "missing timestamp",
+      "payload": "{\"id\":\"evt_01\",\"type\":\"storage.object.created\"}",
+      "secret": "whsec_test_current",
+      "now_seconds": 1788530400,
+      "header": "v1=dab96b48e73fe56712eadb1517a04da91693396ef90dff8f0477f5e570a3f052",
+      "error": "missing_timestamp"
+    },
+    {
+      "name": "duplicate timestamp",
+      "payload": "{\"id\":\"evt_01\",\"type\":\"storage.object.created\"}",
+      "secret": "whsec_test_current",
+      "now_seconds": 1788530400,
+      "header": "t=1788530400,t=1788530400,v1=dab96b48e73fe56712eadb1517a04da91693396ef90dff8f0477f5e570a3f052",
+      "error": "invalid_signature_format"
+    },
+    {
+      "name": "malformed digest",
+      "payload": "{\"id\":\"evt_01\",\"type\":\"storage.object.created\"}",
+      "secret": "whsec_test_current",
+      "now_seconds": 1788530400,
+      "header": "t=1788530400,v1=not-hex",
+      "error": "invalid_signature_format"
+    }
+  ]
+}

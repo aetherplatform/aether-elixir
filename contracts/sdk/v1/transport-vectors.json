@@ -1,0 +1,21 @@
+{
+  "version": "1.0.0",
+  "cases": [
+    {
+      "name": "path and query escaping",
+      "base_url": "https://api.useaether.co/",
+      "path": "/v1/storage/objects/{object_id}",
+      "path_values": {"object_id": "obj/a b"},
+      "query": {"key": "folder/a+b.txt", "limit": 25},
+      "expected": "https://api.useaether.co/v1/storage/objects/obj%2Fa%20b?key=folder%2Fa%2Bb.txt&limit=25"
+    },
+    {
+      "name": "missing path parameter",
+      "base_url": "https://api.useaether.co",
+      "path": "/v1/storage/objects/{object_id}",
+      "path_values": {},
+      "query": {},
+      "error": "missing_path_parameter"
+    }
+  ]
+}

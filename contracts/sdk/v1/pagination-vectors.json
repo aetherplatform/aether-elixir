@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "cases": [
+    {"name": "single page", "cursors": [null], "max_pages": 10, "expected": "complete"},
+    {"name": "multiple pages", "cursors": ["next-1", "next-2", null], "max_pages": 10, "expected": "complete"},
+    {"name": "repeated cursor", "cursors": ["next-1", "next-1"], "max_pages": 10, "expected": "repeated_cursor"},
+    {"name": "page limit", "cursors": ["next-1", "next-2"], "max_pages": 2, "expected": "max_pages_exceeded"},
+    {"name": "invalid page limit", "cursors": [], "max_pages": 0, "expected": "invalid_max_pages"}
+  ]
+}
