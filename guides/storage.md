@@ -34,6 +34,12 @@ abort; the returned error remains the original failure, and
 succeeds, an availability polling failure does not abort the upload. Pass a
 zero-argument `:cancelled?` function to stop transfers and polling.
 
+The workflow supplies `metadata: %{}` when metadata is omitted. When using
+`Storage.create_upload_intent/3` directly, include an empty metadata map if
+you have no custom fields. The current Mac staging deployment persists omitted
+metadata as `null`, which violates the public object contract and causes a
+response validation error after completion. Explicit `metadata: nil` is invalid.
+
 For direct provider operations, use `Aether.SDK.Storage.Transfer.upload/4`,
 `upload_multipart/3`, or `download/3`. These functions take signed URLs and
 provider headers, not an Aether client. They never forward the client's token
