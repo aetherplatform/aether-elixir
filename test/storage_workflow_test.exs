@@ -75,6 +75,8 @@ defmodule Aether.SDK.Storage.WorkflowTest do
 
       case {conn.method, conn.request_path} do
         {"POST", "/v1/storage/upload-intents"} ->
+          {:ok, request_body, conn} = Plug.Conn.read_body(conn)
+          assert Jason.decode!(request_body)["metadata"] == %{}
           Req.Test.json(conn, intent())
 
         {"POST", "/v1/storage/uploads/upl_00000000000000000000000000000001/complete"} ->
@@ -142,6 +144,9 @@ defmodule Aether.SDK.Storage.WorkflowTest do
   test "size mismatch prevents API calls and polling handles deleted, timeout, cancellation" do
     assert {:error, %{code: "size_mismatch"}} =
              Workflow.upload_object(client(), body(), "wrong length")
+
+    assert {:error, %{code: "invalid_request"}} =
+             Workflow.upload_object(client(), Map.put(body(), :metadata, nil), "hello")
 
     owner = self()
 

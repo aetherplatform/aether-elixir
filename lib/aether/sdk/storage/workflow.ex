@@ -30,6 +30,7 @@ defmodule Aether.SDK.Storage.Workflow do
   def upload_object(client, request, source, options \\ []) do
     with {:ok, size} <- Source.size(source),
          :ok <- check_size(size, field(request, :expected_size)) do
+      request = default_metadata(request)
       keys = Keyword.get(options, :idempotency_keys, %{})
 
       keys =
@@ -244,6 +245,15 @@ defmodule Aether.SDK.Storage.Workflow do
 
   defp check_size(_, _),
     do: {:error, Error.new("size_mismatch", "Upload source size does not match expected_size")}
+
+  # Older Storage deployments persist omitted metadata as null, although the
+  # public object contract requires a map. Explicit null still fails validation.
+  defp default_metadata(request) do
+    case Map.get(request, :metadata, Map.get(request, "metadata", :__aether_unset__)) do
+      :__aether_unset__ -> Map.put(request, :metadata, %{})
+      _ -> request
+    end
+  end
 
   defp idempotency(key), do: %{"idempotency-key" => key}
   defp tag({:error, error}, name), do: {:error, stage(error, name)}
