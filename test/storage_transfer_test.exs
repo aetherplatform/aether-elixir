@@ -1,5 +1,6 @@
 defmodule Aether.SDK.Storage.TransferTest do
-  use ExUnit.Case, async: true
+  # Wall-clock lifecycle assertions run apart from the CPU-heavy generator tests.
+  use ExUnit.Case, async: false
   alias Aether.SDK.Storage.Transfer
 
   test "shared multipart range vectors" do
@@ -229,17 +230,20 @@ defmodule Aether.SDK.Storage.TransferTest do
 
     Req.Test.stub(__MODULE__, fn conn ->
       send(owner, {:worker, self()})
-      Process.sleep(200)
+      Process.sleep(5_000)
       Plug.Conn.send_resp(conn, 200, "secret")
     end)
 
-    assert {:error, %{code: "request_timeout"}} =
-             Transfer.download_binary("https://provider.example?token=secret",
-               timeout: 20,
-               req_options: [plug: {Req.Test, __MODULE__}]
-             )
+    request =
+      Task.async(fn ->
+        Transfer.download_binary("https://provider.example?token=secret",
+          timeout: 1_000,
+          req_options: [plug: {Req.Test, __MODULE__}]
+        )
+      end)
 
-    assert_received {:worker, worker}
+    assert_receive {:worker, worker}, 2_000
+    assert {:error, %{code: "request_timeout"}} = Task.await(request, 3_000)
     refute Process.alive?(worker)
 
     assert {:error, %{code: "aborted"}} =
