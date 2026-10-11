@@ -14,6 +14,10 @@ Kerma adoption is a separate follow-up.
 The released tar and its tag remain immutable. Post-release documentation
 updates may change files on `main`; do not rebuild those changed files as the
 existing package version. Use a new reviewed version for the next package.
+After the release tag exists, the protected **Publish released Elixir
+documentation** workflow can publish README/release-note corrections.
+It requires the runtime, dependency lock and guides to match the release tag
+and never uploads or rebuilds the package.
 
 ## Prepare the reviewed source
 
