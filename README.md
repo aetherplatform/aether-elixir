@@ -3,24 +3,27 @@
 Official Elixir client for Aether's public Identity, Events, Notifications,
 Storage and Webhooks APIs. The SDK covers 80 contract-approved operations.
 
-**Release status:** `0.1.0-beta.1` is being prepared. Hex publication and hosted
-acceptance are pending. Do not treat a successful local test run as proof that
-an Aether environment is configured or available.
+**Release status:** [`0.1.0-beta.1`](https://hex.pm/packages/aether_sdk/0.1.0-beta.1)
+is published on Hex. The exact published package passed the five-platform
+Mac staging journey; controlled email OAuth and passwordless completion also
+passed with that package. SMS delivery remains unverified. SDK installation
+does not provision an Aether application or hosted environment.
 
 Requires Elixir 1.17 or later within 1.x. CI covers Elixir/OTP 1.17/27, 1.18/27
 and 1.19/28. Runtime dependencies are Req, Jason and Telemetry.
 
-## Try the source
+## Install
 
-Until publication is confirmed, use a local checkout:
+Add the exact beta version to your Mix dependencies, then run `mix deps.get`:
 
 ```elixir
 # mix.exs
-{:aether_sdk, path: "../aether-elixir"}
+{:aether_sdk, "== 0.1.0-beta.1"}
 ```
 
-The planned immutable Hex version is `{:aether_sdk, "== 0.1.0-beta.1"}`.
 The package name is `aether_sdk`; modules live under `Aether.SDK`.
+Read the [API documentation and guides](https://hexdocs.pm/aether_sdk/0.1.0-beta.1/).
+Pin the beta version and review changes before upgrading.
 
 ## Make a request
 
