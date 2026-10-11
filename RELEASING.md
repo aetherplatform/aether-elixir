@@ -1,11 +1,23 @@
 # Immutable beta release
 
 Initial version: `0.1.0-beta.1`. Source repository: `aetherplatform/aether-elixir`.
-Hex package: `aether_sdk`. Intended initial Hex maintainer: `xhehdy`.
+Hex package: `aether_sdk`. Initial Hex maintainer: `xhehdy`.
 
-This source remains unreleased until every gate below passes. A Hex account
-exists; local publisher authentication and a publication credential are still
-required. Kerma adoption follows the verified release and is not part of it.
+The initial Hex package and HexDocs were published on 2026-10-11 from reviewed
+commit `41aebbfd69259b6c4c6151769412ee3ee340700a`. The published tar SHA-256 is
+`7aeac5dfc06adad1af2c53a0138c94a6a8555d93a12c1632e6b064d2c363c3a6`.
+An independent Mix project installed the exact published version and passed
+all five hosted platform checks. Controlled email OAuth and passwordless
+completion passed against the reviewed tar. SMS delivery remains unverified.
+Kerma adoption is a separate follow-up.
+
+The released tar and its tag remain immutable. Post-release documentation
+updates may change files on `main`; do not rebuild those changed files as the
+existing package version. Use a new reviewed version for the next package.
+After the release tag exists, the protected **Publish released Elixir
+documentation** workflow can publish README/release-note corrections.
+It requires the runtime, dependency lock and guides to match the release tag
+and never uploads or rebuilds the package.
 
 ## Prepare the reviewed source
 
@@ -105,10 +117,15 @@ external consumer check after publication.
 Only then update the docs site and README to advertise Hex installation.
 Record Kerma adoption as the next task against that immutable version.
 
-## Current pending gates
+## Initial publication and recovery
 
-- Hosted sandbox endpoint was unreachable during preparation on 2026-10-10.
-- Controlled email OAuth/passwordless proof with the packaged SDK is pending.
-- SMS hosted delivery is unverified.
-- Hex authentication, scoped credential, public publication and external
-  published-package verification are pending.
+Before the package existed, Hex offered no package-only publication permission.
+The maintainer published the exact reviewed tar and docs with a temporary
+local bootstrap key. Once ownership exists, use a key restricted to
+`aether_sdk` in the protected `hex-publish` environment and revoke the broader
+bootstrap key. The protected release workflow can verify the existing tar,
+complete its immutable tag/prerelease, and run the published consumer check
+without replacing the Hex version.
+
+SMS hosted delivery is unverified. The Mac staging proof does not establish
+production readiness or provision an environment for consuming applications.

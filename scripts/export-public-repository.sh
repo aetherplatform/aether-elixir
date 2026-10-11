@@ -26,7 +26,7 @@ for entry in lib test scripts guides mix.exs mix.lock .formatter.exs .gitignore 
 done
 
 mkdir -p "${output}/.github/workflows"
-for workflow in ci.yml release.yml; do
+for workflow in ci.yml release.yml docs.yml; do
   if [[ -f "${SDK_ROOT}/.github/workflows/${workflow}" ]]; then
     cp "${SDK_ROOT}/.github/workflows/${workflow}" "${output}/.github/workflows/${workflow}"
   fi
