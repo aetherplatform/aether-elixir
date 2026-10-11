@@ -17,7 +17,12 @@ defmodule Aether.SDK.MixProject do
       package: [
         licenses: ["Apache-2.0"],
         links: %{"GitHub" => @source, "Aether" => "https://useaether.co"},
-        files: ~w(lib mix.exs README.md CHANGELOG.md RELEASING.md LICENSE NOTICE guides)
+        files:
+          (Path.wildcard("lib/**/*") ++
+             Path.wildcard("guides/*.md") ++
+             ~w(mix.exs README.md CHANGELOG.md RELEASING.md LICENSE NOTICE))
+          |> Enum.filter(&File.regular?/1)
+          |> Enum.sort()
       ],
       source_url: @source,
       homepage_url: "https://useaether.co",
